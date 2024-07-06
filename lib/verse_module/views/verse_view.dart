@@ -1,101 +1,40 @@
-import 'package:chapter/components/chapter_landing.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
-import 'package:chapter/verse_module/model/verse_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:page_flip/page_flip.dart';
 
 class VerseView extends StatefulWidget {
-  const VerseView({super.key, required this.verseNo});
+  const VerseView({
+    super.key,
+    required this.verseNo,
+    required this.chapterNo,
+  });
 
-  final String verseNo;
+  final int chapterNo;
+  final int verseNo;
 
   @override
   State<VerseView> createState() => _VerseViewState();
 }
 
 class _VerseViewState extends State<VerseView> {
-
   int _selectedAuthor = 0;
   int _selectedLanguage = 0;
-  _buildPagesList(VerseModel state) {
-    List<Widget> pagesWidget = [];
-
-    pagesWidget.add(
-      ChapterLanding(
-        title: "Chapter ${state.result?.chapter}",
-        name: "Hitesh patel",
-        subTitle: "Verse ${state.result?.verse}",
-      ),
-    );
-
-    pagesWidget.add(
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Verse", style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            Text(
-              state.result?.slok ?? '',
-              style: Theme.of(context).textTheme.headlineSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 64),
-            Text("Transliteration", style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            Text(
-              state.result?.transliteration ?? '',
-              style: Theme.of(context).textTheme.headlineSmall,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-
-    final pageText = _splitTextIntoPages(
-      context,
-      state.result?.comments?[_selectedAuthor].languages?[_selectedLanguage].text ?? '',
-    );
-
-    for (var page in pageText) {
-      pagesWidget.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Text(
-            page,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
-      );
-    }
-
-
-    return PageFlipWidget(
-      backgroundColor: Colors.white,
-      lastPage: Container(
-        color: Colors.white,
-        child: const Center(
-          child: Text('Last Page!'),
-        ),
-      ),
-      children: pagesWidget,
-    );
-  }
 
   @override
   void initState() {
-    BlocProvider.of<VerseCubit>(context).getVerse();
+    BlocProvider.of<VerseCubit>(context).getVerse(
+      chapterNo: widget.chapterNo,
+      verseNo: widget.verseNo,
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+      ),
       body: BlocBuilder<VerseCubit, VerseState>(
         builder: (context, state) {
           if (state is VerseLoading) {
@@ -105,8 +44,35 @@ class _VerseViewState extends State<VerseView> {
           }
 
           if (state is VerseSuccess) {
-            return _buildPagesList(state.state);
-
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                children: [
+                  Text(
+                    state.state.result?.slok ?? '',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(height: 2),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 64),
+                  Text("Transliteration", style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                  Text(
+                    state.state.result?.transliteration ?? '',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(height: 1.4),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 64),
+                  Text("Meaning", style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                  Text(
+                    state.state.result?.comments?[_selectedAuthor].languages![_selectedLanguage]
+                            .text ??
+                        '',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            );
           }
 
           return const Center(
@@ -133,7 +99,6 @@ class _VerseViewState extends State<VerseView> {
                         onTap: () {
                           setState(() {
                             _selectedLanguage = index;
-
                           });
                         },
                         child: Container(
@@ -164,7 +129,6 @@ class _VerseViewState extends State<VerseView> {
                           setState(() {
                             _selectedLanguage = 0;
                             _selectedAuthor = index;
-
                           });
                         },
                         child: Container(
@@ -190,32 +154,4 @@ class _VerseViewState extends State<VerseView> {
       }),
     );
   }
-}
-
-List<String> _splitTextIntoPages(BuildContext context, String text) {
-  List<String> pageList = [];
-
-  TextPainter textPainter = TextPainter(
-    textDirection: TextDirection.ltr,
-  );
-
-  TextStyle textStyle = const TextStyle(fontSize: 16);
-  double pageWidth = MediaQuery.of(context).size.width - 32; // Horizontal padding
-  double pageHeight = MediaQuery.of(context).size.height - 200; // Vertical padding
-
-  String remainingText = text;
-  while (remainingText.isNotEmpty) {
-    textPainter.text = TextSpan(text: remainingText, style: textStyle);
-    textPainter.layout(maxWidth: pageWidth);
-
-    int endIndex = textPainter.getPositionForOffset(Offset(pageWidth, pageHeight)).offset;
-    if (endIndex == 0) {
-      endIndex = remainingText.length;
-    }
-
-    pageList.add(remainingText.substring(0, endIndex).trim());
-    remainingText = remainingText.substring(endIndex).trim();
-  }
-
-  return pageList;
 }

@@ -26,7 +26,7 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
   @override
   void initState() {
     final chapterModel = ChapterModel.fromJson(chapterData);
-    _chapter = chapterModel.chapters![widget.chapterNo];
+    _chapter = chapterModel.chapters![widget.chapterNo ];
     scrollController = ScrollController();
     scrollController.addListener(() => setState(() {}));
     super.initState();
@@ -61,7 +61,8 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
                           context.pushNamed(
                             AppRoutes.verse,
                             extra: {
-                              "verse_no": "BG${widget.chapterNo}.${index+1}"
+                              "chapter_no": widget.chapterNo + 1,
+                              "verse_no": index + 1,
                             },
                           );
                         },
