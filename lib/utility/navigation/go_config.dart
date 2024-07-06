@@ -29,8 +29,11 @@ final goConfig = GoRouter(
       name: AppRoutes.verse,
       builder: (context, state) {
         final arguments = state.extra as Map<String, dynamic>;
-        final verseNo = arguments["verse_no"] as String;
-        return VerseView(verseNo: verseNo);
+
+        print("------------- $arguments");
+        final verseNo = arguments["verse_no"] as int;
+        final chapterNo = arguments["chapter_no"] as int;
+        return VerseView(chapterNo: chapterNo, verseNo: verseNo);
       },
     )
   ],

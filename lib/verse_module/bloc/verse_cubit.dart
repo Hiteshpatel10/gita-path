@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
+import 'package:chapter/utility/network/api_request.dart';
 import 'package:chapter/verse_module/model/verse_model.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
@@ -7,26 +8,24 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 part 'verse_state.dart';
 
-
 class VerseCubit extends Cubit<VerseState> {
   VerseCubit() : super(VerseInitial());
 
   final dio = Dio();
-  getVerse() async{
+  getVerse({
+    required int chapterNo,
+    required int verseNo,
+  }) async {
     emit(VerseLoading());
 
-
-    const url = 'http://vgjgfosdf9.execute-api.ap-south-1.amazonaws.com/Prod/gita/verse/BG11.1';
-    final response = await dio.get(url);
-
-
-    final state = VerseModel.fromJson(response.data);
-
-    emit(VerseSuccess(state: state));
-  }
-
-  updateState(VerseModel state){
-    emit(VerseSuccess(state: state));
-
+    try {
+      final response = await getRequest(
+        apiEndPoint: ApiEndpoints.verse(chapterNo: chapterNo, verseNo: verseNo),
+      );
+      final state = VerseModel.fromJson(response.data);
+      emit(VerseSuccess(state: state));
+    } catch (e) {
+      emit(VerseError(errorMessage: "Something went wrong"));
+    }
   }
 }

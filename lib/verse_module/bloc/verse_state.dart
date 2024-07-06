@@ -12,4 +12,7 @@ class VerseSuccess extends VerseState {
   final VerseModel state;
 }
 
-class VerseError extends VerseState {}
+class VerseError extends VerseState {
+  VerseError({this.errorMessage});
+  final String? errorMessage;
+}
