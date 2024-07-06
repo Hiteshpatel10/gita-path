@@ -1,6 +1,7 @@
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
+import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,7 +42,7 @@ class _ChaptersViewState extends State<ChaptersView> {
                     );
                   },
                   child: ParallaxContainer(
-                    imageUrl: locations[index % 10].imageUrl,
+                    imageUrl: '${ApiEndpoints.s3BaseURL}ch${index+1}.png',
                     name: chapter?.title ?? '-',
                     country: "Chapter ${index + 1}",
                   ),
@@ -49,6 +50,10 @@ class _ChaptersViewState extends State<ChaptersView> {
               },
             ),
           ),
+
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 400),
+          )
         ],
       ),
     );

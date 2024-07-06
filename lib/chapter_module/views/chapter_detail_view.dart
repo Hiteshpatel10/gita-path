@@ -1,8 +1,8 @@
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/components/push_button.dart';
-import 'package:chapter/components/quest_map.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
+import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -69,7 +69,7 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
                         height: 50,
                         buttonHeight: 10,
                         width: 65,
-                        backgroundColor: getColorForSections(index),
+                        backgroundColor: Colors.orange,
                         buttonType: LevelButtonTypes.oval,
                         child: Text((index + 1).toString()),
                       ),
@@ -79,7 +79,7 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
               },
             ),
             ParallaxContainer(
-              imageUrl: locations[0].imageUrl,
+              imageUrl: '${ApiEndpoints.s3BaseURL}ch${widget.chapterNo+1}.png',
               name: _chapter.title ?? '-',
               country: "Chapter ${widget.chapterNo + 1}",
             ),

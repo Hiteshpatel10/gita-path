@@ -81,77 +81,78 @@ class _VerseViewState extends State<VerseView> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: BlocBuilder<VerseCubit, VerseState>(builder: (context, state) {
-        if (state is VerseSuccess) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(
-                    state.state.result?.comments?[_selectedAuthor].languages?.length ?? 0,
-                    (index) {
-                      final comments =
-                          state.state.result?.comments?[_selectedAuthor].languages?[index];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedLanguage = index;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: _selectedLanguage == index ? Colors.blue : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.blue),
+      floatingActionButton: BlocBuilder<VerseCubit, VerseState>(
+        builder: (context, state) {
+          if (state is VerseSuccess) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      state.state.result?.comments?[_selectedAuthor].languages?.length ?? 0,
+                      (index) {
+                        final comments =
+                            state.state.result?.comments?[_selectedAuthor].languages?[index];
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedLanguage = index;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _selectedLanguage == index ? Colors.blue : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.blue),
+                            ),
+                            child: Text(comments?.language ?? '-'),
                           ),
-                          child: Text(comments?.language ?? '-'),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(
-                    state.state.result?.comments?.length ?? 0,
-                    (index) {
-                      final comments = state.state.result?.comments?[index];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedLanguage = 0;
-                            _selectedAuthor = index;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: _selectedAuthor == index ? Colors.blue : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.blue),
+                const SizedBox(height: 12),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      state.state.result?.comments?.length ?? 0,
+                      (index) {
+                        final comments = state.state.result?.comments?[index];
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedLanguage = 0;
+                              _selectedAuthor = index;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _selectedAuthor == index ? Colors.blue : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.blue),
+                            ),
+                            child: Text(comments?.author ?? '-'),
                           ),
-                          child: Text(comments?.author ?? '-'),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              )
-            ],
-          );
-        }
-
-        return const SizedBox.shrink();
-      }),
+                )
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 }

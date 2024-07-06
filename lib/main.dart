@@ -1,4 +1,3 @@
-import 'package:chapter/components/quest_map.dart';
 import 'package:chapter/utility/navigation/go_config.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
 import 'package:flutter/material.dart';
@@ -29,30 +28,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _scrollController.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: QuestMap(
-        scrollController: _scrollController,
-      ),
-    );
-  }
-}
