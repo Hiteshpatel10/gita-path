@@ -1,4 +1,5 @@
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
+import 'package:chapter/verse_module/model/verse_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -101,6 +102,15 @@ class _VerseViewState extends State<VerseView> {
                             setState(() {
                               _selectedLanguage = index;
                             });
+
+                            showModalBottomSheet(
+                              context: context,
+                              constraints:
+                                  BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                              builder: (context) {
+                                return OptionDrawer(comments: state.state.result?.comments ?? []);
+                              },
+                            );
                           },
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -153,6 +163,56 @@ class _VerseViewState extends State<VerseView> {
           return const SizedBox.shrink();
         },
       ),
+    );
+  }
+}
+
+
+
+
+class OptionDrawer extends StatelessWidget {
+  const OptionDrawer({
+    super.key,
+    required this.comments,
+  });
+
+  final List<Comments?> comments;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        DropdownButton<String?>(
+          value: comments[0]?.author,
+          items: List.generate(
+            comments.length,
+            (index) {
+              final comment = comments[index];
+
+              return DropdownMenuItem(
+                value: comment?.author,
+                child: Text(comment?.author ?? '-'),
+              );
+            },
+          ),
+          onChanged: (value) {},
+        ),
+        DropdownButton<String?>(
+          // value: comments[0]?.languages?.first.language,
+          items: List.generate(
+            comments[0]?.languages?.length ?? 0,
+            (index) {
+              final comment = comments[0]?.languages?[index];
+
+              return DropdownMenuItem(
+                value: comment?.language,
+                child: Text(comment?.language ?? '-'),
+              );
+            },
+          ),
+          onChanged: (value) {},
+        ),
+      ],
     );
   }
 }
