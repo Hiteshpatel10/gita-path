@@ -1,9 +1,23 @@
 import 'package:chapter/utility/navigation/go_config.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late final SharedPreferences prefs;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyCdJoD0lKc_I-BmX9Gh6PigzjyHbo0Fygk",
+      appId: "1:393406614769:android:2dc622a37a64da1df36d50",
+      messagingSenderId: "393406614769 ",
+      projectId: "gita-sarathi",
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -13,9 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<VerseCubit>(create: (context) => VerseCubit())
-      ],
+      providers: [BlocProvider<VerseCubit>(create: (context) => VerseCubit())],
       child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -27,4 +39,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

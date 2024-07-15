@@ -1,12 +1,24 @@
+import 'package:chapter/auth_module/views/sign_in_view.dart';
 import 'package:chapter/chapter_module/views/chapter_detail_view.dart';
 import 'package:chapter/chapter_module/views/chapters_view.dart';
+import 'package:chapter/main.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/views/verse_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 final goConfig = GoRouter(
-  initialLocation: AppRoutes.chapters,
+  initialLocation: prefs.getBool('signIn') == true  ? AppRoutes.chapters : AppRoutes.signIn,
   routes: [
+    GoRoute(
+      path: AppRoutes.signIn,
+      name: AppRoutes.signIn,
+      builder: (context, state) {
+        return const SignInView();
+      },
+    ),
     GoRoute(
       path: AppRoutes.chapters,
       name: AppRoutes.chapters,
