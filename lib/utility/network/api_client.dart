@@ -1,3 +1,4 @@
+import 'package:chapter/main.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:dio/dio.dart';
 
@@ -6,6 +7,7 @@ class DioClient {
     Dio dio = Dio();
 
     dio.options.baseUrl = ApiEndpoints.baseURL;
+    dio.options.headers['Authorization'] = "Bearer ${prefs.getString("email")}";
 
     RequestOptions? requestOptions;
     dio.interceptors.add(
