@@ -1,7 +1,10 @@
+import 'package:chapter/chapter_module/model/chapter_model.dart';
+import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
 import 'package:chapter/verse_module/model/verse_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class VerseView extends StatefulWidget {
   const VerseView({
@@ -20,6 +23,7 @@ class VerseView extends StatefulWidget {
 class _VerseViewState extends State<VerseView> {
   int _selectedAuthor = 0;
   int _selectedLanguage = 0;
+  late final Chapters _chapter;
 
   @override
   void initState() {
@@ -27,6 +31,8 @@ class _VerseViewState extends State<VerseView> {
       chapterNo: widget.chapterNo,
       verseNo: widget.verseNo,
     );
+    final chapterModel = ChapterModel.fromJson(chapterData);
+    _chapter = chapterModel.chapters![widget.chapterNo - 1];
     super.initState();
   }
 
@@ -49,13 +55,39 @@ class _VerseViewState extends State<VerseView> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/flowers/orchid.png", height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          'Verse ${state.state.result?.verse}',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Image.asset("assets/flowers/orchid.png", height: 16),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     state.state.result?.slok ?? '',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(height: 2),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 64),
-                  Text("Transliteration", style: Theme.of(context).textTheme.titleMedium),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/flowers/flower.png", height: 28),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child:
+                            Text("Transliteration", style: Theme.of(context).textTheme.titleMedium),
+                      ),
+                      Image.asset("assets/flowers/flower.png", height: 28),
+                    ],
+                  ),
                   const SizedBox(height: 12),
                   Text(
                     state.state.result?.transliteration ?? '',
@@ -63,14 +95,26 @@ class _VerseViewState extends State<VerseView> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 64),
-                  Text("Meaning", style: Theme.of(context).textTheme.titleMedium),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/flowers/hibiscus.png", height: 24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text("Meaning", style: Theme.of(context).textTheme.titleMedium),
+                      ),
+                      Image.asset("assets/flowers/hibiscus.png", height: 24),
+                    ],
+                  ),
                   const SizedBox(height: 12),
                   Text(
-                    state.state.result?.comments?[_selectedAuthor].languages![_selectedLanguage]
+                    state.state.result?.comments?[_selectedAuthor].languages?[_selectedLanguage]
                             .text ??
                         '',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 16),
                   ),
+                  const SizedBox(height: 80),
                 ],
               ),
             );
@@ -85,79 +129,88 @@ class _VerseViewState extends State<VerseView> {
       floatingActionButton: BlocBuilder<VerseCubit, VerseState>(
         builder: (context, state) {
           if (state is VerseSuccess) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      state.state.result?.comments?[_selectedAuthor].languages?.length ?? 0,
-                      (index) {
-                        final comments =
-                            state.state.result?.comments?[_selectedAuthor].languages?[index];
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedLanguage = index;
-                            });
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(44, 44),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(54))),
+                    onPressed: () {
+                      if (widget.verseNo - 1 <= 0) {
+                        return;
+                      }
 
-                            showModalBottomSheet(
-                              context: context,
-                              constraints:
-                                  BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                              builder: (context) {
-                                return OptionDrawer(comments: state.state.result?.comments ?? []);
-                              },
-                            );
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: _selectedLanguage == index ? Colors.blue : Colors.transparent,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.blue),
-                            ),
-                            child: Text(comments?.language ?? '-'),
-                          ),
-                        );
-                      },
-                    ),
+                      context.pushReplacementNamed(
+                        AppRoutes.verse,
+                        extra: {
+                          "chapter_no": widget.chapterNo,
+                          "verse_no": widget.verseNo - 1,
+                        },
+                      );
+                    },
+                    child: const Icon(Icons.keyboard_arrow_left),
                   ),
-                ),
-                const SizedBox(height: 12),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      state.state.result?.comments?.length ?? 0,
-                      (index) {
-                        final comments = state.state.result?.comments?[index];
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedLanguage = 0;
-                              _selectedAuthor = index;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: _selectedAuthor == index ? Colors.blue : Colors.transparent,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.blue),
-                            ),
-                            child: Text(comments?.author ?? '-'),
-                          ),
-                        );
-                      },
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        showDragHandle: true,
+                        isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width,
+                        ),
+                        builder: (context) {
+                          return OptionDrawer(
+                            comments: state.state.result?.comments ?? [],
+                            selectedAuthor: _selectedAuthor,
+                            selectedLanguage: _selectedLanguage,
+                            onOptionChange: (selectedAuthor, selectedLanguage) {
+                              setState(() {
+                                _selectedLanguage = selectedLanguage;
+                                _selectedAuthor = selectedAuthor;
+                              });
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: const Text("Options"),
                   ),
-                )
-              ],
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(44, 44),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(54),
+                      ),
+                    ),
+                    onPressed: () {
+                      print("------------${widget.verseNo} ${_chapter.verses}");
+                      if (widget.verseNo + 1 > _chapter.verses!) {
+                        return;
+                      }
+
+                      context.pushReplacementNamed(
+                        AppRoutes.verse,
+                        extra: {
+                          "chapter_no": widget.chapterNo,
+                          "verse_no": widget.verseNo + 1,
+                        },
+                      );
+                    },
+                    child: const Icon(Icons.keyboard_arrow_right),
+                  ),
+                ],
+              ),
             );
           }
           return const SizedBox.shrink();
@@ -167,52 +220,122 @@ class _VerseViewState extends State<VerseView> {
   }
 }
 
+typedef OptionSelectCallback = void Function(int selectedAuthor, int selectedLanguage);
 
-
-
-class OptionDrawer extends StatelessWidget {
+class OptionDrawer extends StatefulWidget {
   const OptionDrawer({
     super.key,
     required this.comments,
+    required this.onOptionChange,
+    required this.selectedAuthor,
+    required this.selectedLanguage,
   });
 
   final List<Comments?> comments;
+  final OptionSelectCallback onOptionChange;
+  final int selectedAuthor;
+  final int selectedLanguage;
+
+  @override
+  State<OptionDrawer> createState() => _OptionDrawerState();
+}
+
+class _OptionDrawerState extends State<OptionDrawer> {
+  late int author;
+  late int language;
+
+  @override
+  void initState() {
+    author = widget.selectedAuthor;
+    language = widget.selectedLanguage;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DropdownButton<String?>(
-          value: comments[0]?.author,
-          items: List.generate(
-            comments.length,
-            (index) {
-              final comment = comments[index];
-
-              return DropdownMenuItem(
-                value: comment?.author,
-                child: Text(comment?.author ?? '-'),
-              );
-            },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Commentators",
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-          onChanged: (value) {},
-        ),
-        DropdownButton<String?>(
-          // value: comments[0]?.languages?.first.language,
-          items: List.generate(
-            comments[0]?.languages?.length ?? 0,
-            (index) {
-              final comment = comments[0]?.languages?[index];
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(
+              widget.comments.length,
+              (index) {
+                final comment = widget.comments[index];
 
-              return DropdownMenuItem(
-                value: comment?.language,
-                child: Text(comment?.language ?? '-'),
-              );
-            },
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      author = index;
+                      language = 0;
+                    });
+                    widget.onOptionChange(author, language);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: author == index ? Colors.blue : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: Text(
+                      comment?.author ?? '-',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-          onChanged: (value) {},
-        ),
-      ],
+          const SizedBox(height: 24),
+          Text(
+            "Comment Language",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(
+              widget.comments[author]?.languages?.length ?? 0,
+              (index) {
+                final comment = widget.comments[author]?.languages?[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      language = index;
+                    });
+                    widget.onOptionChange(author, language);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: language == index ? Colors.blue : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: Text(
+                      comment?.language ?? '-',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 }
