@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chapter/main.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:dio/dio.dart';
@@ -6,8 +8,13 @@ class DioClient {
   Dio init() {
     Dio dio = Dio();
 
+    dio.options.headers['Authorization'] = "Bearer hpatel.hp2001@gmail.com";
     dio.options.baseUrl = ApiEndpoints.baseURL;
-    dio.options.headers['Authorization'] = "Bearer ${prefs.getString("email")}";
+
+    dio.options.headers[HttpHeaders.authorizationHeader] ="Basic asdjfgjsagfjkgasdhfvsgadhjfajshdgfhjkasdgfkjh";
+
+    // dio.options.headers['Authorization'] = "Bearer ${prefs.getString("email")}";
+
 
     RequestOptions? requestOptions;
     dio.interceptors.add(
@@ -18,6 +25,7 @@ class DioClient {
           return handler.next(options);
         },
         onError: (e, handler) {
+
           // if(GlobalVar.updateFCM){
           //   final crashlytics = FirebaseCrashlytics.instance;
           //
@@ -28,6 +36,7 @@ class DioClient {
           //     crashlytics.setCustomKey("request_post", '${requestOptions?.data}');
           //   }
           // }
+
 
           return handler.next(e);
         },

@@ -4,13 +4,11 @@ import 'package:chapter/chapter_module/views/chapters_view.dart';
 import 'package:chapter/main.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/views/verse_view.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 final goConfig = GoRouter(
-  initialLocation: prefs.getBool('signIn') == true  ? AppRoutes.chapters : AppRoutes.signIn,
+  initialLocation: prefs.getBool('signIn') == true  ? AppRoutes.chapters : AppRoutes.chapters,
   routes: [
     GoRoute(
       path: AppRoutes.signIn,

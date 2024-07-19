@@ -1,8 +1,10 @@
+import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ChaptersView extends StatefulWidget {
@@ -18,6 +20,8 @@ class _ChaptersViewState extends State<ChaptersView> {
   @override
   void initState() {
     _chapterModel = ChapterModel.fromJson(chapterData);
+    BlocProvider.of<ChapterCubit>(context).getUser();
+    
     super.initState();
   }
 
