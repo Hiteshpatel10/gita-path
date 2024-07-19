@@ -1,3 +1,5 @@
+import 'package:chapter/auth_module/bloc/auth_cubit.dart';
+import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/utility/navigation/go_config.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +29,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider<VerseCubit>(create: (context) => VerseCubit())],
+      providers: [
+        BlocProvider<VerseCubit>(create: (context) => VerseCubit()),
+        BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
+        BlocProvider<ChapterCubit>(create: (context) => ChapterCubit()),
+      ],
       child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(

@@ -8,16 +8,24 @@ Future<Response> getRequest({required String apiEndPoint}) async {
   try {
     debugPrint("^^^^^^^^^^^^^^^^^^ $apiEndPoint getRequest Start ^^^^^^^^^^^^^^^^^^");
 
-    response = await client.get(apiEndPoint);
+    response = await client.get(
+      apiEndPoint,
+      options: Options(
+        method: 'GET',
+        headers: {
+          "skfhs": 12,
+        },
+      ),
+    );
 
     debugPrint("^^^^^^^^^^^^^^^^^^ $apiEndPoint getRequest End ^^^^^^^^^^^^^^^^^^");
-
-    if (response.statusCode != 200) {
-      throw DioException(
-        requestOptions: RequestOptions(path: apiEndPoint),
-        response: response,
-      );
-    }
+    //
+    // if (response.statusCode != 200) {
+    //   throw DioException(
+    //     requestOptions: RequestOptions(path: apiEndPoint),
+    //     response: response,
+    //   );
+    // }
   } catch (error) {
     debugPrint("Error in getRequest: $error");
     rethrow;
