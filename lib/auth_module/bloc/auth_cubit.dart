@@ -21,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
 
       prefs.setString("email", oAuthResponse.email);
+      prefs.setBool('signIn', true);
 
       final response = await postRequest(
         apiEndPoint: ApiEndpoints.createUser,

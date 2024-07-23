@@ -1,9 +1,11 @@
+import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/components/push_button.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:math' as math;
 
 import 'package:go_router/go_router.dart';
@@ -26,7 +28,7 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
   @override
   void initState() {
     final chapterModel = ChapterModel.fromJson(chapterData);
-    _chapter = chapterModel.chapters![widget.chapterNo ];
+    _chapter = chapterModel.chapters![widget.chapterNo];
     scrollController = ScrollController();
     scrollController.addListener(() => setState(() {}));
     super.initState();
@@ -35,56 +37,76 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        controller: scrollController,
-        // reverse: true,
-        child: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              reverse: true,
-              itemCount: _chapter.verses?.toInt() ?? 0,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final baseY = index * _gapHeight;
+      body: BlocBuilder<ChapterCubit, ChapterState>(
+        builder: (context, state) {
+          if (state is SuccessState) {
+            final model = state.state.result;
 
-                return Transform.translate(
-                  offset: Offset(
-                    100 * math.sin((scrollController.offset + index * _gapHeight + baseY) / 150),
-                    0,
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    reverse: true,
+                    itemCount: _chapter.verses?.toInt() ?? 0,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final baseY = index * _gapHeight;
+
+                      return Transform.translate(
+                        offset: Offset(
+                          100 *
+                              math.sin(
+                                  (scrollController.offset + index * _gapHeight + baseY) / 150),
+                          0,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Center(
+                            child: LevelAnimatedButton(
+                              onPressed: () {
+                                context.pushNamed(
+                                  AppRoutes.verse,
+                                  extra: {
+                                    "chapter_no": widget.chapterNo + 1,
+                                    "verse_no": index + 1,
+                                  },
+                                );
+                              },
+                              height: 50,
+                              buttonHeight: 10,
+                              width: 65,
+                              backgroundColor:
+                                  model?.reads?[widget.chapterNo].verses?.contains(index + 1) ==
+                                          true
+                                      ? Colors.orange
+                                      : Colors.orangeAccent,
+                              buttonType: LevelButtonTypes.oval,
+                              child: Text((index + 1).toString()),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Center(
-                      child: LevelAnimatedButton(
-                        onPressed: () {
-                          context.pushNamed(
-                            AppRoutes.verse,
-                            extra: {
-                              "chapter_no": widget.chapterNo + 1,
-                              "verse_no": index + 1,
-                            },
-                          );
-                        },
-                        height: 50,
-                        buttonHeight: 10,
-                        width: 65,
-                        backgroundColor: Colors.orange,
-                        buttonType: LevelButtonTypes.oval,
-                        child: Text((index + 1).toString()),
-                      ),
-                    ),
+                  ParallaxContainer(
+                    imageUrl: '${ApiEndpoints.s3BaseURL}ch${widget.chapterNo + 1}.png',
+                    name: _chapter.title ?? '-',
+                    country: "Chapter ${widget.chapterNo + 1}",
+                    progress: model?.reads?[widget.chapterNo].progress,
                   ),
-                );
-              },
-            ),
-            ParallaxContainer(
-              imageUrl: '${ApiEndpoints.s3BaseURL}ch${widget.chapterNo+1}.png',
-              name: _chapter.title ?? '-',
-              country: "Chapter ${widget.chapterNo + 1}",
-            ),
-          ],
-        ),
+                ],
+              ),
+            );
+          }
+
+          if (state is ErrorState) {
+            return Text("ere");
+          }
+
+          return Text("ere");
+        },
       ),
     );
   }

@@ -10,12 +10,13 @@ class ParallaxContainer extends StatelessWidget {
     super.key,
     required this.imageUrl,
     required this.name,
-    required this.country,
+    required this.country, this.progress,
   });
 
   final String imageUrl;
   final String name;
   final String country;
+  final num? progress;
   final GlobalKey _backgroundImageKey = GlobalKey();
 
   @override
@@ -30,7 +31,7 @@ class ParallaxContainer extends StatelessWidget {
             children: [
               _buildParallaxBackground(context),
               _buildGradient(),
-              _buildTitleAndSubtitle(),
+              _buildTitleAndSubtitle(context),
             ],
           ),
         ),
@@ -71,7 +72,7 @@ class ParallaxContainer extends StatelessWidget {
     );
   }
 
-  Widget _buildTitleAndSubtitle() {
+  Widget _buildTitleAndSubtitle(BuildContext context) {
     return Positioned(
       left: 20,
       bottom: 20,
@@ -94,6 +95,17 @@ class ParallaxContainer extends StatelessWidget {
               fontSize: 14,
             ),
           ),
+
+          const SizedBox(height: 8),
+          SizedBox(
+            width: MediaQuery.of(context).size.width*0.76,
+            child: LinearProgressIndicator(
+              value: (progress ?? 0)/100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+
+
         ],
       ),
     );

@@ -9,4 +9,7 @@ class LoadingState extends ChapterState {}
 
 class ErrorState extends ChapterState {}
 
-class SuccessState extends ChapterState {}
+class SuccessState extends ChapterState {
+  SuccessState({required this.state});
+  final UserDataModel state;
+}

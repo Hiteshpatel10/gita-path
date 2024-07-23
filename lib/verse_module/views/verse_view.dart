@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
@@ -24,16 +27,32 @@ class _VerseViewState extends State<VerseView> {
   int _selectedAuthor = 0;
   int _selectedLanguage = 0;
   late final Chapters _chapter;
+  Timer? _updateTimer;
 
   @override
   void initState() {
+    super.initState();
+
     BlocProvider.of<VerseCubit>(context).getVerse(
       chapterNo: widget.chapterNo,
       verseNo: widget.verseNo,
     );
+
     final chapterModel = ChapterModel.fromJson(chapterData);
     _chapter = chapterModel.chapters![widget.chapterNo - 1];
-    super.initState();
+
+    _updateTimer = Timer(const Duration(seconds: 8), () {
+      BlocProvider.of<ChapterCubit>(context).updateVerseRead(
+        chapterNo: widget.chapterNo,
+        verseNo: widget.verseNo,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _updateTimer?.cancel();
+    super.dispose();
   }
 
   @override

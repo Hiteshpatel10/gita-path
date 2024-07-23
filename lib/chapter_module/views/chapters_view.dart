@@ -20,47 +20,52 @@ class _ChaptersViewState extends State<ChaptersView> {
   @override
   void initState() {
     _chapterModel = ChapterModel.fromJson(chapterData);
+    BlocProvider.of<ChapterCubit>(context).getUser();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ChapterCubit>(context).getUser();
-
     return Scaffold(
       appBar: AppBar(),
-      body: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: _chapterModel.chapters?.length ?? 0,
-              (context, index) {
-                final chapter = _chapterModel.chapters?[index];
-                return GestureDetector(
-                  onTap: () {
-                    context.pushNamed(
-                      AppRoutes.chapterDetail,
-                      extra: {
-                        "chapter_no": index,
+      body: BlocBuilder<ChapterCubit, ChapterState>(builder: (context, state) {
+        if (state is SuccessState) {
+          return CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: _chapterModel.chapters?.length ?? 0,
+                  (context, index) {
+                    final chapter = _chapterModel.chapters?[index];
+                    return GestureDetector(
+                      onTap: () {
+                        context.pushNamed(
+                          AppRoutes.chapterDetail,
+                          extra: {
+                            "chapter_no": index,
+                          },
+                        );
                       },
+                      child: ParallaxContainer(
+                        imageUrl: '${ApiEndpoints.s3BaseURL}ch${index + 1}.png',
+                        name: chapter?.title ?? '-',
+                        progress: state.state.result?.reads?[index].progress,
+                        country: "Chapter ${index + 1}",
+                      ),
                     );
                   },
-                  child: ParallaxContainer(
-                    imageUrl: '${ApiEndpoints.s3BaseURL}ch${index+1}.png',
-                    name: chapter?.title ?? '-',
-                    country: "Chapter ${index + 1}",
-                  ),
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 400),
+              )
+            ],
+          );
+        }
 
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 400),
-          )
-        ],
-      ),
+        return Text("sdfjs");
+      }),
     );
   }
 }

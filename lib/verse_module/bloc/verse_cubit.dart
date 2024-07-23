@@ -22,8 +22,9 @@ class VerseCubit extends Cubit<VerseState> {
       final response = await getRequest(
         apiEndPoint: ApiEndpoints.verse(chapterNo: chapterNo, verseNo: verseNo),
       );
-      // final state = VerseModel.fromJson(response.data);
-      // emit(VerseSuccess(state: state));
+
+      final state = VerseModel.fromJson(response);
+      emit(VerseSuccess(state: state));
     } catch (e) {
       emit(VerseError(errorMessage: "Something went wrong"));
     }
