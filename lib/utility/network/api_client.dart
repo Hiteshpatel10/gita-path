@@ -8,10 +8,8 @@ class DioClient {
   Dio init() {
     Dio dio = Dio();
 
-    dio.options.headers['Authorization'] = "Bearer hpatel.hp2001@gmail.com";
     dio.options.baseUrl = ApiEndpoints.baseURL;
 
-    dio.options.headers[HttpHeaders.authorizationHeader] ="Basic asdjfgjsagfjkgasdhfvsgadhjfajshdgfhjkasdgfkjh";
 
     // dio.options.headers['Authorization'] = "Bearer ${prefs.getString("email")}";
 

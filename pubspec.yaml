@@ -38,7 +38,7 @@ dependencies:
   go_router: ^14.1.4
   page_flip: ^0.2.3
   aws_dynamodb_api: ^2.0.0
-  http: ^1.2.1
+  http: ^1.2.2
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
   dio: ^4.0.6

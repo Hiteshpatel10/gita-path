@@ -11,25 +11,31 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   signInUser() async {
-    GoogleSignIn googleSignIn = GoogleSignIn();
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
 
-    final oAuthResponse = await googleSignIn.signIn();
-    if (oAuthResponse == null) {
-      AuthFailed(errorMessage: "Failed to sign in user");
-      return;
+      googleSignIn.signOut();
+      final oAuthResponse = await googleSignIn.signIn();
+      if (oAuthResponse == null) {
+        throw "Google AUth Fialed";
+      }
+
+      prefs.setString("email", oAuthResponse.email);
+
+      final response = await postRequest(
+        apiEndPoint: ApiEndpoints.createUser,
+        postData: {
+          "profile_url": oAuthResponse.photoUrl,
+          "display_name": oAuthResponse.displayName,
+          "fcm_token": "sjdfhsdjfb"
+        },
+      );
+
+      emit(AuthSuccess());
+    } catch (e) {
+      emit(AuthFailed(errorMessage: "Failed to sign in user"));
+
+      print(e);
     }
-    print("-------------- $oAuthResponse");
-    prefs.setString("email", oAuthResponse.email);
-
-    final response = await getRequest(apiEndPoint: ApiEndpoints.createUser);
-
-    print("-------------- $response");
-
-    if (response.data['status'] == 0) {
-      AuthFailed(errorMessage: response.data['message'] ?? "Failed to sign in user");
-      return;
-    }
-
-    AuthSuccess();
   }
 }

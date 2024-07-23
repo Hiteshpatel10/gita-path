@@ -13,10 +13,10 @@ class ChapterCubit extends Cubit<ChapterState> {
 
     final response = await getRequest(apiEndPoint: ApiEndpoints.user);
 
-    if (response.data['status'] == 0) {
+    if (response.body == 0) {
       emit(ErrorState());
     }
 
-    print("---------- ${response.data}");
+    // print("---------- ${response.data}");
   }
 }

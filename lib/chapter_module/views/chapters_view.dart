@@ -20,13 +20,14 @@ class _ChaptersViewState extends State<ChaptersView> {
   @override
   void initState() {
     _chapterModel = ChapterModel.fromJson(chapterData);
-    BlocProvider.of<ChapterCubit>(context).getUser();
-    
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ChapterCubit>(context).getUser();
+
     return Scaffold(
       appBar: AppBar(),
       body: CustomScrollView(

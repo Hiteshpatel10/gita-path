@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 
 final goConfig = GoRouter(
-  initialLocation: prefs.getBool('signIn') == true  ? AppRoutes.chapters : AppRoutes.chapters,
+  initialLocation: prefs.getBool('signIn') == true  ? AppRoutes.chapters : AppRoutes.signIn,
   routes: [
     GoRoute(
       path: AppRoutes.signIn,
