@@ -1,16 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
-
-
 
 class ParallaxContainer extends StatelessWidget {
   ParallaxContainer({
     super.key,
     required this.imageUrl,
     required this.name,
-    required this.country, this.progress,
+    required this.country,
+    this.progress,
   });
 
   final String imageUrl;
@@ -40,7 +40,6 @@ class ParallaxContainer extends StatelessWidget {
   }
 
   Widget _buildParallaxBackground(BuildContext context) {
-
     return Flow(
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context),
@@ -48,10 +47,17 @@ class ParallaxContainer extends StatelessWidget {
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
-        Image.network(
-          imageUrl,
+        CachedNetworkImage(
           key: _backgroundImageKey,
+          imageUrl: imageUrl,
           fit: BoxFit.cover,
+          fadeInCurve: Curves.easeIn,
+          placeholder: (context, url) {
+            return Image.asset("assets/backgrounds/bg.jpeg", fit: BoxFit.cover);
+          },
+          errorWidget: (context, url, error) {
+            return Image.asset("assets/backgrounds/bg.jpeg", fit: BoxFit.cover);
+          },
         ),
       ],
     );
@@ -95,17 +101,14 @@ class ParallaxContainer extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-
           const SizedBox(height: 8),
           SizedBox(
-            width: MediaQuery.of(context).size.width*0.76,
+            width: MediaQuery.of(context).size.width * 0.76,
             child: LinearProgressIndicator(
-              value: (progress ?? 0)/100,
+              value: (progress ?? 0) / 100,
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
-
         ],
       ),
     );
@@ -272,4 +275,3 @@ class RenderParallax extends RenderBox
         (background.parentData as ParallaxParentData).offset + offset + Offset(0.0, childRect.top));
   }
 }
-

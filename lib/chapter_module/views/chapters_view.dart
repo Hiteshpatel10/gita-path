@@ -64,6 +64,12 @@ class _ChaptersViewState extends State<ChaptersView> {
           );
         }
 
+        if (state is LoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         return Text("sdfjs");
       }),
     );

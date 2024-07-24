@@ -1,5 +1,6 @@
 import 'package:chapter/auth_module/bloc/auth_cubit.dart';
 import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
+import 'package:chapter/theme/core_colors.dart';
 import 'package:chapter/utility/navigation/go_config.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,8 +38,17 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: CoreColors.yellowishOrange),
           useMaterial3: true,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(MediaQuery.of(context).size.width * 0.8, 54),
+              // foregroundColor: CoreColors.yellowishOrange,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          )
         ),
         routerConfig: goConfig,
       ),

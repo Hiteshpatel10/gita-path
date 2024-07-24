@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
+import 'package:chapter/theme/core_colors.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/bloc/verse_cubit.dart';
 import 'package:chapter/verse_module/model/verse_model.dart';
@@ -101,8 +102,10 @@ class _VerseViewState extends State<VerseView> {
                       Image.asset("assets/flowers/flower.png", height: 28),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child:
-                            Text("Transliteration", style: Theme.of(context).textTheme.titleMedium),
+                        child: Text(
+                          "Transliteration",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                       ),
                       Image.asset("assets/flowers/flower.png", height: 28),
                     ],
@@ -120,7 +123,10 @@ class _VerseViewState extends State<VerseView> {
                       Image.asset("assets/flowers/hibiscus.png", height: 24),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text("Meaning", style: Theme.of(context).textTheme.titleMedium),
+                        child: Text(
+                          "Meaning",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                       ),
                       Image.asset("assets/flowers/hibiscus.png", height: 24),
                     ],
@@ -175,6 +181,7 @@ class _VerseViewState extends State<VerseView> {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(100, 44),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -213,7 +220,6 @@ class _VerseViewState extends State<VerseView> {
                       ),
                     ),
                     onPressed: () {
-                      print("------------${widget.verseNo} ${_chapter.verses}");
                       if (widget.verseNo + 1 > _chapter.verses!) {
                         return;
                       }
@@ -280,7 +286,10 @@ class _OptionDrawerState extends State<OptionDrawer> {
         children: [
           Text(
             "Commentators",
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: CoreColors.blackBean, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -302,13 +311,14 @@ class _OptionDrawerState extends State<OptionDrawer> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: author == index ? Colors.blue : Colors.transparent,
+                      color: author == index ? CoreColors.brown : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blue),
+                      border: Border.all(color: Colors.brown),
                     ),
                     child: Text(
                       comment?.author ?? '-',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: author == index ? CoreColors.mintCream : CoreColors.brown),
                     ),
                   ),
                 );
@@ -318,7 +328,10 @@ class _OptionDrawerState extends State<OptionDrawer> {
           const SizedBox(height: 24),
           Text(
             "Comment Language",
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: CoreColors.blackBean, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -339,13 +352,14 @@ class _OptionDrawerState extends State<OptionDrawer> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: language == index ? Colors.blue : Colors.transparent,
+                      color: language == index ? CoreColors.brown : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blue),
+                      border: Border.all(color: CoreColors.brown),
                     ),
                     child: Text(
                       comment?.language ?? '-',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: language == index ? CoreColors.mintCream : CoreColors.brown),
                     ),
                   ),
                 );

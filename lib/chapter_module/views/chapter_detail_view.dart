@@ -2,6 +2,7 @@ import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/components/push_button.dart';
+import 'package:chapter/theme/core_colors.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,12 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
     _chapter = chapterModel.chapters![widget.chapterNo];
     scrollController = ScrollController();
     scrollController.addListener(() => setState(() {}));
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        scrollController.animateTo((_chapter.verses ?? 0) * 80, duration: const Duration(seconds: 2), curve: Curves.easeIn);
+      },
+    );
     super.initState();
   }
 
@@ -80,10 +87,13 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
                               backgroundColor:
                                   model?.reads?[widget.chapterNo].verses?.contains(index + 1) ==
                                           true
-                                      ? Colors.orange
-                                      : Colors.orangeAccent,
+                                      ? CoreColors.butterScotch
+                                      : CoreColors.lavenderBlush,
                               buttonType: LevelButtonTypes.oval,
-                              child: Text((index + 1).toString()),
+                              child: Text(
+                                (index + 1).toString(),
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
                             ),
                           ),
                         ),
