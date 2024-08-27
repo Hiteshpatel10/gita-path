@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
+import 'package:chapter/chapter_module/bloc/user_activity_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/theme/core_colors.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
@@ -42,7 +43,7 @@ class _VerseViewState extends State<VerseView> {
     final chapterModel = ChapterModel.fromJson(chapterData);
     _chapter = chapterModel.chapters![widget.chapterNo - 1];
 
-    _updateTimer = Timer(const Duration(seconds: 8), () {
+    _updateTimer = Timer(const Duration(seconds: 6), () {
       BlocProvider.of<ChapterCubit>(context).updateVerseRead(
         chapterNo: widget.chapterNo,
         verseNo: widget.verseNo,

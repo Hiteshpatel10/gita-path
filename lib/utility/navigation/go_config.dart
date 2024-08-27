@@ -40,7 +40,6 @@ final goConfig = GoRouter(
       builder: (context, state) {
         final arguments = state.extra as Map<String, dynamic>;
 
-        print("------------- $arguments");
         final verseNo = arguments["verse_no"] as int;
         final chapterNo = arguments["chapter_no"] as int;
         return VerseView(chapterNo: chapterNo, verseNo: verseNo);

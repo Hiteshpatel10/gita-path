@@ -30,6 +30,7 @@ class Result {
     this.email,
     this.lastRead,
     this.reads,
+    this.appUpdate,
   });
 
   Result.fromJson(dynamic json) {
@@ -41,10 +42,15 @@ class Result {
         reads?.add(Reads.fromJson(v));
       });
     }
+    appUpdate = json['app_update'] != null ? AppUpdate.fromJson(json['app_update']) : null;
+
   }
   String? email;
   String? lastRead;
   List<Reads>? reads;
+  AppUpdate? appUpdate;
+
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -79,6 +85,38 @@ class Reads {
     map['chapter'] = chapter;
     map['verses'] = verses;
     map['progress'] = progress;
+    return map;
+  }
+}
+
+
+
+class AppUpdate {
+  AppUpdate({
+    this.buildNo,
+    this.forceUpdate,
+    this.softUpdate,
+    this.message,
+  });
+
+  AppUpdate.fromJson(dynamic json) {
+    buildNo = json['build_no'];
+    forceUpdate = json['force_update'];
+    softUpdate = json['soft_update'];
+    title = json['title'];
+    message = json['message'];
+  }
+  num? buildNo;
+  num? forceUpdate;
+  num? softUpdate;
+  String? message;
+  String? title;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['build_no'] = buildNo;
+    map['force_update'] = forceUpdate;
+    map['message'] = message;
     return map;
   }
 }

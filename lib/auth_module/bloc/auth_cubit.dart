@@ -17,7 +17,7 @@ class AuthCubit extends Cubit<AuthState> {
       googleSignIn.signOut();
       final oAuthResponse = await googleSignIn.signIn();
       if (oAuthResponse == null) {
-        throw "Google AUth Fialed";
+        throw "Google AUth Failed";
       }
 
       prefs.setString("email", oAuthResponse.email);
@@ -28,7 +28,7 @@ class AuthCubit extends Cubit<AuthState> {
         postData: {
           "profile_url": oAuthResponse.photoUrl,
           "display_name": oAuthResponse.displayName,
-          "fcm_token": "sjdfhsdjfb"
+          "fcm_token": prefs.getString("FCM_TOKEN"),
         },
       );
 

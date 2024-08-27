@@ -8,4 +8,7 @@ class ApiEndpoints {
   static const createUser = "gita/createUser";
   static const user = "gita/user";
   static const updateRead = "gita/updateRead";
+  static const updateFCM = "gita/updateFCM";
+  static const userActivity = "gita/getUserWeekActivity";
+  static const updateUserActivity = "gita/updateUserActivity";
 }
