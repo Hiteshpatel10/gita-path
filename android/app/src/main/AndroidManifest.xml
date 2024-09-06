@@ -54,3 +54,8 @@
         </intent>
     </queries>
 </manifest>
+
+
+<!--    {-->
+<!--    "GCM": "{\"notification\": { \"body\": \"Sample message for Android endpoints\", \"title\":\"Hello world\" } }"-->
+<!--    }-->

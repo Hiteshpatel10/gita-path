@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:chapter/chapter_module/bloc/chapter_cubit.dart';
-import 'package:chapter/chapter_module/bloc/user_activity_cubit.dart';
 import 'package:chapter/chapter_module/model/chapter_model.dart';
 import 'package:chapter/theme/core_colors.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';

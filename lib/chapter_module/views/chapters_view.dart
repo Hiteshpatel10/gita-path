@@ -5,7 +5,6 @@ import 'package:chapter/chapter_module/model/user_activity_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
-import 'package:chapter/utility/services/app_update_service.dart';
 import 'package:chapter/utility/services/firebase_analytics_service.dart';
 import 'package:chapter/utility/services/firebase_notification_service.dart';
 import 'package:flutter/material.dart';

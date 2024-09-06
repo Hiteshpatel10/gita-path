@@ -21,14 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
-  await Firebase.initializeApp(
-    // options: const FirebaseOptions(
-    //   apiKey: "AIzaSyCdJoD0lKc_I-BmX9Gh6PigzjyHbo0Fygk",
-    //   appId: "1:393406614769:android:2dc622a37a64da1df36d50",
-    //   messagingSenderId: "393406614769 ",
-    //   projectId: "gita-sarathi",
-    // ),
-  );
+  await Firebase.initializeApp();
 
 
   await FirebaseNotificationService().initNotification();
@@ -87,6 +80,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp.router(
         title: 'Gita Sarathi',
+
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: CoreColors.yellowishOrange),
           useMaterial3: true,
