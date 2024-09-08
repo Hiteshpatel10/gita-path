@@ -5,6 +5,7 @@ import 'package:chapter/chapter_module/model/user_activity_model.dart';
 import 'package:chapter/components/parallax_container.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
+import 'package:chapter/utility/services/core_notification_service.dart';
 import 'package:chapter/utility/services/firebase_analytics_service.dart';
 import 'package:chapter/utility/services/firebase_notification_service.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,9 @@ class _ChaptersViewState extends State<ChaptersView> {
   @override
   void initState() {
     FirebaseAnalyticsService().init();
-    FirebaseNotificationService().updateFCMToken();
 
     _chapterModel = ChapterModel.fromJson(chapterData);
-    BlocProvider.of<ChapterCubit>(context).getUser(context);
+    // BlocProvider.of<ChapterCubit>(context).getUser(context);
     BlocProvider.of<UserActivityCubit>(context).getUserActivity();
     super.initState();
   }

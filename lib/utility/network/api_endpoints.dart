@@ -11,4 +11,7 @@ class ApiEndpoints {
   static const updateFCM = "gita/updateFCM";
   static const userActivity = "gita/getUserWeekActivity";
   static const updateUserActivity = "gita/updateUserActivity";
+
+  static const snsCreate = "gita/snsCreate";
+  static const snsUpdate = "gita/snsUpdate";
 }

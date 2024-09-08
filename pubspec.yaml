@@ -53,6 +53,7 @@ dependencies:
   package_info_plus: ^8.0.2
   in_app_update: ^4.2.3
   url_launcher: ^6.3.0
+  logger: ^2.4.0
 
 dev_dependencies:
   package_rename: ^1.7.0

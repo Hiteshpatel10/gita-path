@@ -3,6 +3,7 @@ import 'package:chapter/chapter_module/model/user_data_model.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:chapter/utility/network/api_request.dart';
 import 'package:chapter/utility/services/app_update_service.dart';
+import 'package:chapter/utility/services/core_notification_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
@@ -19,6 +20,8 @@ class ChapterCubit extends Cubit<ChapterState> {
     final state = UserDataModel.fromJson(response);
 
     emit(SuccessState(state: state));
+
+    CoreNotificationService().updateFCMToken(state.result?.fcmToken, state.result?.clientEndpoint);
 
     Future.delayed(Duration.zero, () => checkUpdate(context, appUpdate: state.result?.appUpdate));
   }

@@ -4,6 +4,7 @@ import 'package:chapter/chapter_module/views/chapters_view.dart';
 import 'package:chapter/main.dart';
 import 'package:chapter/utility/navigation/app_routes.dart';
 import 'package:chapter/verse_module/views/verse_view.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 
@@ -28,8 +29,8 @@ final goConfig = GoRouter(
       path: AppRoutes.chapterDetail,
       name: AppRoutes.chapterDetail,
       builder: (context, state) {
-        final arguments = state.extra as Map<String, dynamic>;
-        final chapterNo = arguments["chapter_no"] as int;
+        final arguments = state.extra as Map<String, dynamic>?;
+        final chapterNo = arguments?["chapter_no"] as int? ?? 12;
 
         return ChapterDetailView(chapterNo: chapterNo);
       },

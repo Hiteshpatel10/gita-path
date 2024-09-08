@@ -38,6 +38,8 @@ class _ChapterDetailViewState extends State<ChapterDetailView> {
         scrollController.animateTo((_chapter.verses ?? 0) * 80, duration: const Duration(seconds: 2), curve: Curves.easeIn);
       },
     );
+
+
     super.initState();
   }
 

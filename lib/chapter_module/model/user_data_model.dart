@@ -36,6 +36,8 @@ class Result {
   Result.fromJson(dynamic json) {
     email = json['email'];
     lastRead = json['last_read'];
+    clientEndpoint = json['client_endpoint'];
+    fcmToken = json['fcm_token'];
     if (json['reads'] != null) {
       reads = [];
       json['reads'].forEach((v) {
@@ -47,6 +49,8 @@ class Result {
   }
   String? email;
   String? lastRead;
+  String? fcmToken;
+  String? clientEndpoint;
   List<Reads>? reads;
   AppUpdate? appUpdate;
 
