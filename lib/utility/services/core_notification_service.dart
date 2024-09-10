@@ -4,7 +4,6 @@ import 'package:chapter/utility/navigation/go_config.dart';
 import 'package:chapter/utility/network/api_endpoints.dart';
 import 'package:chapter/utility/network/api_request.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class CoreNotificationService {
@@ -26,20 +25,16 @@ class CoreNotificationService {
     final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
-
     );
-
 
     // ------- Android notification click handler
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse details) {
         try {
-
           final Map payload = json.decode(details.payload ?? "");
 
-
-          onNotificationClicked(payload: payload, from: "onDidReceiveNotificationResponse" );
+          onNotificationClicked(payload: payload, from: "onDidReceiveNotificationResponse");
         } catch (e) {
           logger.e("onDidReceiveNotificationResponse error $e");
         }
@@ -63,21 +58,21 @@ class CoreNotificationService {
     );
   }
 
-
-  onNotificationClicked({required Map payload, required String from}) {
-
-    debugPrint("-------------- $from");
+  onNotificationClicked({required Map payload, required String from})  {
     logger.e(payload);
-    if (payload.containsKey('route') && payload.containsKey('arguments')) {
-      final  arguments = json.decode(payload['arguments']);
 
-      if(arguments == null){
+    getRequest(apiEndPoint: ApiEndpoints.notificationCounter);
+
+    if (payload.containsKey('screen') && payload.containsKey('arguments')) {
+      final arguments = json.decode(payload['arguments']);
+
+      if (arguments == null) {
         return;
       }
 
-      goConfig.pushNamed(payload['route'], extra: arguments);
-    } else if (payload.containsKey('route') == true) {
-      goConfig.pushNamed(payload['route']);
+      goConfig.pushNamed(payload['screen'], extra: arguments);
+    } else if (payload.containsKey('screen') == true) {
+      goConfig.pushNamed(payload['screen']);
     }
   }
 

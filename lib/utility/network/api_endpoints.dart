@@ -14,4 +14,6 @@ class ApiEndpoints {
 
   static const snsCreate = "gita/snsCreate";
   static const snsUpdate = "gita/snsUpdate";
+
+  static const notificationCounter = "gita/updateNotificationReadCounter";
 }
